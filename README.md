@@ -1,21 +1,20 @@
 # codex-for-opencode
 
-OpenCode plugin tools backed by deterministic web evidence and short-lived Codex CLI sessions.
+OpenCode plugin that delegates work directly to a short-lived Codex CLI agent.
 
 ## Tools
 
-- `web_search_codex`: Brave Search when `BRAVE_SEARCH_API_KEY` is set, otherwise DuckDuckGo HTML search. Codex can summarize only the returned results.
-- `web_fetch_codex`: public HTTP(S) fetching with DNS, private-network, and redirect checks. It extracts readable text or Markdown, then Codex can summarize only that content.
-- `codex_task`: delegates a bounded coding task to `codex exec --json` in OpenCode's current directory.
+- `codex_task`: delegates a bounded task to `codex exec --json` in OpenCode's current directory.
+- Set `web_search: true` to invoke Codex with `--search`, exposing Codex's native live `web_search` tool to the delegated agent.
+- Delegated sessions use `gpt-5.6-luna` by default. Supply `model` to override it for one task.
 
-This plugin deliberately does not duplicate OpenCode's native `apply_patch`, `webfetch`, or optional `websearch` tools.
+Codex, not this plugin, chooses and uses its internal tools. The plugin returns Codex's final response rather than parsing or summarizing web evidence itself.
 
 ## Requirements
 
 - OpenCode 1.18.4 or later
 - Node.js and npm
 - An authenticated `codex` CLI on `PATH`
-- Optional: `BRAVE_SEARCH_API_KEY` for Brave Search; without it, search uses DuckDuckGo's HTML endpoint
 
 ## Install
 
@@ -55,8 +54,8 @@ codex --version
 opencode debug config
 ```
 
-In a restarted OpenCode session, ask it to use `web_search_codex` for a current topic. It should expose the three plugin tools above.
+In a restarted OpenCode session, ask it to use `codex_task` with `web_search: true` for a current topic. It should expose the `codex_task` plugin tool.
 
 ## Safety
 
-`web_fetch_codex` accepts only public HTTP(S) destinations and checks every redirect before following it. It rejects URL credentials, local names, and DNS resolutions containing private or reserved network addresses. `codex_task` runs only in the active OpenCode directory; select `read-only` unless writes are required.
+`codex_task` runs only in the active OpenCode directory. Select `read-only` unless writes are required. When `web_search` is enabled, network access and source selection are governed by Codex's native tool behavior.

@@ -1,14 +1,17 @@
 # codex-for-opencode
 
-OpenCode plugin that delegates work directly to a short-lived Codex CLI agent.
+OpenCode plugin that exposes the Pi Codex tool set through short-lived Codex CLI agents.
 
 ## Tools
 
-- `codex_task`: delegates a bounded task to `codex exec --json` in OpenCode's current directory.
-- Set `web_search: true` to invoke Codex with `--search`, exposing Codex's native live `web_search` tool to the delegated agent.
-- Delegated sessions use `gpt-5.6-luna` by default. Supply `model` to override it for one task.
+- `web_search_codex`: uses Codex's native web search and fetch capabilities to return structured search results.
+- `web_fetch_codex`: uses Codex's native web capabilities to read a specific URL and return a structured extraction.
+- `apply_patch_codex`: asks Codex to validate or apply a patch in the active OpenCode directory.
+- `codex_task`: delegates a bounded implementation, review, debugging, research, or test task to Codex.
 
-Codex, not this plugin, chooses and uses its internal tools. The plugin returns Codex's final response rather than parsing or summarizing web evidence itself.
+Web-enabled tools invoke `codex --search`; no Brave, DuckDuckGo, or local HTTP client is used. All delegated sessions use `gpt-5.6-luna` by default. Supply `model` to override it for one task.
+
+Codex, not this plugin, chooses and uses its internal tools. The plugin returns Codex's final response rather than fetching, extracting, or summarizing web evidence itself.
 
 ## Requirements
 
@@ -54,8 +57,8 @@ codex --version
 opencode debug config
 ```
 
-In a restarted OpenCode session, ask it to use `codex_task` with `web_search: true` for a current topic. It should expose the `codex_task` plugin tool.
+In a restarted OpenCode session, it should expose `web_search_codex`, `web_fetch_codex`, `apply_patch_codex`, and `codex_task`.
 
 ## Safety
 
-`codex_task` runs only in the active OpenCode directory. Select `read-only` unless writes are required. When `web_search` is enabled, network access and source selection are governed by Codex's native tool behavior.
+All tools run in the active OpenCode directory. Select `read-only` unless writes are required. Web tools use Codex's native behavior for network access and source selection.

@@ -67,10 +67,10 @@ opencode debug skill
 
 ## Update
 
-Reinstall the Git-backed plugin when the cached package does not refresh automatically:
+OpenCode can cache a moving Git ref. Install a new commit or tag explicitly when an update does not refresh automatically:
 
 ```bash
-opencode plugin "codex-for-opencode@git+https://github.com/blockedby/codex-for-opencode.git" --global --force
+opencode plugin "codex-for-opencode@git+https://github.com/blockedby/codex-for-opencode.git#<commit-or-tag>" --global --force
 ```
 
 ## Safety

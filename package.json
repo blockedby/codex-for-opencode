@@ -20,10 +20,12 @@
     "test": "npm run check"
   },
   "dependencies": {
-    "@opencode-ai/plugin": "^1.18.4"
+    "@opencode-ai/plugin": "^1.18.4",
+    "zod": "^4.1.8"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "yaml": "^2.8.1"
   }
 }

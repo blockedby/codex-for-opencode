@@ -46,15 +46,24 @@ Quit and restart OpenCode after installation or configuration changes. Plugins a
 
 ## Verify
 
+Check the source package:
+
 ```bash
 cd ~/code/tools/codex-for-opencode
 npm test
+npm pack --dry-run
 codex --version
+```
+
+Then verify the globally installed package from a neutral directory outside the checkout:
+
+```bash
+cd /tmp
 opencode debug config
 opencode debug skill
 ```
 
-`npm test` type-checks the plugin and validates every bundled skill's required frontmatter. In a restarted OpenCode session, `opencode debug config` should include the package's absolute `skills/` path, `opencode debug skill` should include `codex-tools`, and the model should see `web_search_codex`, `web_fetch_codex`, `apply_patch_codex`, and `codex_task`.
+`npm test` type-checks the plugin and validates every bundled skill's YAML frontmatter. `npm pack --dry-run` confirms that the distributable contains the plugin and skills. In a restarted OpenCode session, `opencode debug config` should resolve the plugin and its `skills/` path under OpenCode's installed package cache, not the source checkout. `opencode debug skill` should include `codex-tools`, and the model should see `web_search_codex`, `web_fetch_codex`, `apply_patch_codex`, and `codex_task`.
 
 ## Update
 

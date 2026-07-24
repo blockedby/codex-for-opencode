@@ -1,7 +1,4 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["./plugin/codex-tools.ts"],
-  "skills": {
-    "paths": ["./skills"]
-  }
+  "plugin": ["./plugin/codex-tools.ts"]
 }

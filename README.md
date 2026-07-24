@@ -21,32 +21,28 @@ Codex, not this plugin, chooses and uses its internal tools. The plugin returns 
 
 ## Install
 
-Install the package dependencies:
+Install globally from GitHub with OpenCode's plugin manager:
 
 ```bash
-cd ~/code/tools/codex-for-opencode
-npm install
+opencode plugin "codex-for-opencode@git+https://github.com/blockedby/codex-for-opencode.git" --global
 ```
 
-The checked-in `opencode.jsonc` enables the plugin and skill whenever OpenCode starts from this directory. To use it from every project, add the same paths to your global configuration instead.
+This adds one package entry to the global OpenCode configuration. The plugin registers its bundled `skills/` directory through the OpenCode `config` hook, so no separate `skills.paths` entry or symlink is needed. Because the repository is private, Git must already be authenticated for `github.com` on the machine running OpenCode; `gh auth setup-git` configures Git to use the active GitHub CLI credentials.
 
-Add this plugin and skill directory to `~/.config/opencode/opencode.jsonc`. Preserve existing configuration fields.
+The resulting plugin entry is:
 
 ```jsonc
 {
   "$schema": "https://opencode.ai/config.json",
   "plugin": [
-    "file:///home/<user>/code/tools/codex-for-opencode/plugin/codex-tools.ts"
-  ],
-  "skills": {
-    "paths": [
-      "/home/<user>/code/tools/codex-for-opencode/skills"
-    ]
-  }
+    "codex-for-opencode@git+https://github.com/blockedby/codex-for-opencode.git"
+  ]
 }
 ```
 
-Replace `<user>` with the local username. Quit and restart OpenCode after changing plugins or skills: OpenCode loads them only at startup.
+For local development, clone the repository, run `npm install`, and reference `plugin/codex-tools.ts` as shown in the checked-in `opencode.jsonc`. The same config hook registers the adjacent skills directory.
+
+Quit and restart OpenCode after installation or configuration changes. Plugins and skills are loaded at startup.
 
 ## Verify
 
@@ -55,9 +51,18 @@ cd ~/code/tools/codex-for-opencode
 npm test
 codex --version
 opencode debug config
+opencode debug skill
 ```
 
-In a restarted OpenCode session, it should expose `web_search_codex`, `web_fetch_codex`, `apply_patch_codex`, and `codex_task`.
+`npm test` type-checks the plugin and validates every bundled skill's required frontmatter. In a restarted OpenCode session, `opencode debug config` should include the package's absolute `skills/` path, `opencode debug skill` should include `codex-tools`, and the model should see `web_search_codex`, `web_fetch_codex`, `apply_patch_codex`, and `codex_task`.
+
+## Update
+
+Reinstall the Git-backed plugin when the cached package does not refresh automatically:
+
+```bash
+opencode plugin "codex-for-opencode@git+https://github.com/blockedby/codex-for-opencode.git" --global --force
+```
 
 ## Safety
 

@@ -1,5 +1,6 @@
 import { spawn } from "node:child_process";
-import { resolve } from "node:path";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { type Plugin, tool } from "@opencode-ai/plugin";
 
 type Sandbox = "read-only" | "workspace-write" | "danger-full-access";
@@ -7,8 +8,18 @@ type ApprovalPolicy = "never" | "on-request" | "on-failure" | "untrusted";
 type JsonValue = null | boolean | number | string | JsonValue[] | { [key: string]: JsonValue };
 
 const DEFAULT_CODEX_MODEL = "gpt-5.6-luna";
+const SKILLS_DIRECTORY = resolve(dirname(fileURLToPath(import.meta.url)), "../skills");
 
 export const CodexToolsPlugin: Plugin = async () => ({
+  config: async (config) => {
+    const configWithSkills = config as typeof config & { skills?: { paths?: string[] } };
+    configWithSkills.skills ??= {};
+    configWithSkills.skills.paths ??= [];
+    if (!configWithSkills.skills.paths.includes(SKILLS_DIRECTORY)) {
+      configWithSkills.skills.paths.push(SKILLS_DIRECTORY);
+    }
+  },
+
   tool: {
     web_search_codex: tool({
       description:

@@ -15,13 +15,11 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "prepare": "npm run build",
-    "prepack": "npm run build",
+    "compile": "tsc -p tsconfig.build.json",
     "check": "npm run check:types && npm run check:skills",
     "check:types": "tsc --noEmit",
     "check:skills": "node scripts/check-skills.mjs",
-    "test": "npm run check && node --test scripts/plugin.test.mjs"
+    "test": "npm run compile && npm run check && node --test scripts/plugin.test.mjs"
   },
   "dependencies": {
     "@opencode/plugin": "^2.0.26",

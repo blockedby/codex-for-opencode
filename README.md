@@ -63,7 +63,7 @@ opencode plugin list
 opencode api get /api/skill
 ```
 
-`npm test` type-checks with TypeScript 7, validates skill frontmatter, and tests V2 registration and all four executors against a fake Codex CLI. `npm pack --dry-run` builds and verifies the distributable contains compiled JavaScript and the skill. The package entrypoint uses JavaScript so Node does not need to strip TypeScript inside `node_modules`. The active plugin list should include `codex-for-opencode`, the skill list should include `codex-tools`, and the model should see `web_search_codex`, `web_fetch_codex`, `apply_patch_codex`, and `codex_task`.
+`npm test` compiles and type-checks with TypeScript 7, validates skill frontmatter, and tests V2 registration and all four executors against a fake Codex CLI. `npm pack --dry-run` verifies the distributable contains compiled JavaScript and the skill. Compiled `dist/` files are checked into Git: run `npm run compile` after source changes and commit the generated files. Git installs require no lifecycle build scripts, avoiding OpenCode's bundled installer's Git preparation failure. The JavaScript entrypoint also avoids stripping TypeScript inside `node_modules`. The active plugin list should include `codex-for-opencode`, the skill list should include `codex-tools`, and the model should see `web_search_codex`, `web_fetch_codex`, `apply_patch_codex`, and `codex_task`.
 
 ## Update
 

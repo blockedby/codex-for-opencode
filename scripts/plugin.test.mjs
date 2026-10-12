@@ -5,11 +5,12 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { test } from "node:test";
 import plugin from "../plugin/index.ts";
+import compiledPlugin from "../dist/index.js";
 
-async function load(directory) {
+async function load(directory, definition = plugin) {
   const tools = new Map();
   const skills = new Map();
-  await plugin.setup({
+  await definition.setup({
     location: { directory: "/not-the-session-workspace" },
     session: { get: async () => ({ location: { directory } }) },
     tool: { transform: async (fn) => fn({ add: (tool) => tools.set(tool.name, tool) }) },
@@ -32,6 +33,18 @@ test("V2 default entrypoint registers all tools and the bundled skill", async ()
   assert.match(skill.content, /# Codex Tools/);
   assert.equal(skill.content.startsWith("---"), false);
   assert.equal(await readFile(skill.path, "utf8").then((s) => s.includes(skill.content)), true);
+});
+
+test("Git-distributed JavaScript registers the same tools and skill", async () => {
+  assert.equal(compiledPlugin.id, plugin.id);
+  const source = await load(process.cwd());
+  const compiled = await load(process.cwd(), compiledPlugin);
+  assert.deepEqual([...compiled.skills], [...source.skills]);
+  assert.deepEqual([...compiled.tools.keys()], [...source.tools.keys()]);
+  for (const [name, tool] of compiled.tools) {
+    assert.deepEqual(tool.input, source.tools.get(name).input);
+    assert.equal(tool.description, source.tools.get(name).description);
+  }
 });
 
 test("all V2 tool executors return content and use the current session directory", async () => {

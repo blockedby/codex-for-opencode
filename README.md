@@ -27,7 +27,7 @@ Install globally from GitHub with OpenCode's plugin manager:
 opencode plugin add "git+https://github.com/blockedby/codex-for-opencode.git#main"
 ```
 
-This adds one package entry to the global OpenCode configuration. The V2 plugin registers its four tools and bundled skill through domain transforms, so no separate skills configuration or symlink is needed. Because the repository is private, Git must already be authenticated for `github.com` on the machine running OpenCode; `gh auth setup-git` configures Git to use the active GitHub CLI credentials.
+This adds one package entry to the global OpenCode configuration. The V2 plugin registers its four tools and bundled skill through domain transforms, so no separate skills configuration or symlink is needed.
 
 The resulting plugin entry is:
 

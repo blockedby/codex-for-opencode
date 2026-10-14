@@ -10,9 +10,10 @@ Produce actual image files, not a prompt-only answer or a code-drawn substitute.
 ## Select the available execution path
 
 - Prefer the host's built-in `image_gen` capability. If the installed `imagegen` skill is available, load it and follow its native generation/editing workflow rather than maintaining a second SDK runner or copying its implementation.
+- If the current host lacks `image_gen` but the user specifically requests Codex image generation or its end-to-end test, check the installed Codex CLI's native capability before declaring it unavailable. Read [references/native-codex-cli.md](references/native-codex-cli.md): `image_generation` can be enabled in Codex CLI even when OpenCode exposes no image tool. This is still native Codex generation, not the API/CLI fallback from `imagegen`.
 - A skill does not create an unavailable tool. Check the host's tool catalog; do not invent `codex_image_gen` tool calls, Codex CLI flags or image-generation capabilities for `codex_task`.
-- If native generation is unavailable, say so. The installed `imagegen` skill may offer an OpenAI API/CLI fallback; use it only after the user explicitly chooses or confirms that path and its separate billing. A configured API key is not authorization to switch paths. Never request credentials in chat or inspect browser/session secrets.
-- Do not delegate generation just to avoid an unavailable tool. If delegation is explicitly authorized and the host permits it, respect its background-only and cancellation rules. Do not block through a synchronous delegation tool when background execution is required.
+- If both the current host and an authorized native Codex CLI path are unavailable, say so. The installed `imagegen` skill may offer an OpenAI API/CLI fallback; use it only after the user explicitly chooses or confirms that path and its separate billing. A configured API key is not authorization to switch paths. Never request credentials in chat or inspect browser/session secrets.
+- Do not silently delegate a generic image request to another agent. A user-requested native Codex generation/test may run in a bounded Codex CLI session when permitted. Respect background-only and cancellation rules; do not block through a synchronous delegation tool when background execution is required.
 
 ## Shape the request
 

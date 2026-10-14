@@ -17,7 +17,7 @@ Codex, not this plugin, chooses and uses its internal tools. The plugin returns 
 
 `skills/codex-image-gen/` contains a standalone companion skill displayed as **codex_image_gen**. Its portable skill ID is `codex-image-gen`; invoke it with `$codex-image-gen` in Codex or `@codex-image-gen` in OpenCode.
 
-The skill uses the host's native image-generation capability and the installed `imagegen` workflow when available. It covers image briefs, edits, reference roles, transparency checks and saving actual project assets. It does not add a fifth plugin tool, make `codex_task` an image generator, or silently switch to a billed API fallback when native generation is unavailable.
+The skill uses the host's native image-generation capability and the installed `imagegen` workflow when available. When the host exposes no image tool, an explicitly requested native Codex generation/test can use a bounded background Codex CLI session after checking its native `image_generation` capability and ChatGPT sign-in. See [the verified CLI workflow](skills/codex-image-gen/references/native-codex-cli.md). It covers image briefs, edits, reference roles, transparency checks and saving actual project assets. It does not add a fifth plugin tool, make `codex_task` an image generator, or silently switch to a billed API fallback when native generation is unavailable.
 
 For local discovery, link this folder into a skill root. Current Codex uses `~/.agents/skills`; OpenCode uses `~/.config/opencode/skills`. If these roots already resolve to the same shared directory, install the link once rather than creating duplicate copies:
 

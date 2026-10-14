@@ -13,6 +13,20 @@ Web-enabled tools invoke `codex --search`; no Brave, DuckDuckGo, or local HTTP c
 
 Codex, not this plugin, chooses and uses its internal tools. The plugin returns Codex's final response rather than fetching, extracting, or summarizing web evidence itself.
 
+## Image-generation companion skill
+
+`skills/codex-image-gen/` contains a standalone companion skill displayed as **codex_image_gen**. Its portable skill ID is `codex-image-gen`; invoke it with `$codex-image-gen` in Codex or `@codex-image-gen` in OpenCode.
+
+The skill uses the host's native image-generation capability and the installed `imagegen` workflow when available. It covers image briefs, edits, reference roles, transparency checks and saving actual project assets. It does not add a fifth plugin tool, make `codex_task` an image generator, or silently switch to a billed API fallback when native generation is unavailable.
+
+For local discovery, link this folder into a skill root. Current Codex uses `~/.agents/skills`; OpenCode uses `~/.config/opencode/skills`. If these roots already resolve to the same shared directory, install the link once rather than creating duplicate copies:
+
+```bash
+ln -s /absolute/path/to/codex-for-opencode/skills/codex-image-gen ~/.agents/skills/codex-image-gen
+```
+
+Check that the destination does not already exist before installing. The skill is installed separately from the plugin's existing `codex-tools` registration; no plugin configuration change is required. See [Codex skills](https://developers.openai.com/codex/skills) and [image generation](https://developers.openai.com/codex/image-generation) for native-host capabilities.
+
 ## Requirements
 
 - OpenCode 2.0.26 or later (V1 plugins are not compatible with V2)
